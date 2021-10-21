@@ -1,8 +1,9 @@
 <?php
 
-namespace Database\Factories\Profiles;
+namespace Database\Factories\Profile;
 
-use App\Models\Profiles\Profile;
+use App\Models\Profile\Profile;
+use App\Models\Address\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProfileFactory extends Factory
@@ -22,9 +23,11 @@ class ProfileFactory extends Factory
     public function definition()
     {
         return [
+            'name' => $this->faker->firstName(),
+            'lastname' => $this->faker->lastName(),
             'phone' => $this->faker->phoneNumber(),
             'picture' => $this->faker->imageUrl(),
-            'address_id' => $this->faker->randomNumber()
+            'address' => $this->faker->address()
         ];
     }
 }
