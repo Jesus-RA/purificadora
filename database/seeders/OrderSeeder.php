@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Orders\Order;
+use App\Models\Order\Order;
 use Illuminate\Database\Seeder;
-use App\Models\Profiles\Profile;
+use App\Models\Profile\Profile;
+use App\Models\Address\Address;
 
 class OrderSeeder extends Seeder
 {
@@ -19,8 +20,6 @@ class OrderSeeder extends Seeder
 
             Order::factory()->create([
                 'user_id' => $profile->user_id,
-                'address_id' => $profile->address_id,
-                'phone' => $profile->phone,
             ]);
             
         });

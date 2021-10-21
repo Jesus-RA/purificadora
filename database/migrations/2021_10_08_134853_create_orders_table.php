@@ -19,7 +19,8 @@ class CreateOrdersTable extends Migration
             $table->date('date');
             $table->string('phone');
             $table->float('total');
-            $table->foreignId('address_id')->constrained();
+            $table->string('address');
+
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });

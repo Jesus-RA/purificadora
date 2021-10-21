@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories\Orders;
+namespace Database\Factories\Order;
 
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Orders\Order;
-use App\Models\Addresses\Address;
+use App\Models\Order\Order;
+use App\Models\Address\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -28,9 +28,9 @@ class OrderFactory extends Factory
             'quantity' => random_int(1, 20),
             'date' => Carbon::now(),
             'phone' => $this->faker->phoneNumber(),
-            'total' => $this->faker->randomFloat(),
+            'total' => $this->faker->randomFloat(4, 0.00, 4000.00),
+            'address' => $this->faker->address(),
             'user_id' => User::all()->random()->id,
-            'address_id' => Address::all()->random()->id,
         ];
     }
 }

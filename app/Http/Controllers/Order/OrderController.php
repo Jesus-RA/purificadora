@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Orders;
+namespace App\Http\Controllers\Order;
 
-use App\Models\Orders\Order;
+use App\Models\Order\Order;
 use Illuminate\Http\Request;
+use App\Http\Requests\OrderRequest;
 use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
@@ -15,7 +16,11 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $this->authorize('viewAny', Order::class);
+
+        $orders = Order::all();
+
+        return response()->json( $orders, 200 );
     }
 
     /**
@@ -24,9 +29,13 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OrderRequest $request)
     {
-        //
+        $this->authorize('create', Order::class);
+        
+        $order = Order::create( $request->all() );
+
+        return response()->json( $order, 201 );
     }
 
     /**
@@ -37,7 +46,9 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        $this->authorize('view', $order);
+        
+        return response()->json( $order, 200 );
     }
 
     /**
@@ -49,7 +60,11 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $this->authorize('update', $order);
+
+        $order->update( $request->all() );
+
+        return response()->json( $order->fresh(), 201 );
     }
 
     /**
