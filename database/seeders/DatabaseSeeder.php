@@ -41,8 +41,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::create([
-            'email' => 'jesus@gmail.com',
-            'password' => Hash::make('jamon')
+            'email' => 'admin@emperador.com',
         ])->assignRole( $admin );
         
         $this->call(AddressSeeder::class);
