@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Addresses;
+namespace App\Http\Controllers\Address;
 
-use App\Models\Addresses\Address;
+use App\Models\Address\Address;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
