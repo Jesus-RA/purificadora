@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
             Permission::create(['name' => 'update its profile']),
         ]);
 
-        User::create([
+        User::factory()->create([
             'email' => 'admin@emperador.com',
         ])->assignRole( $admin );
         
