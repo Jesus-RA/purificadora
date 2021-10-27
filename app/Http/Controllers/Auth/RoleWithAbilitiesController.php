@@ -18,7 +18,7 @@ class RoleWithAbilitiesController extends Controller
                         ->toArray();
 
         return response()->json([
-            'role' => 'admin',
+            'role' => auth()->user()->getRoleNames()[0],
             'abilities' => $permissions
         ], 200);
     }
