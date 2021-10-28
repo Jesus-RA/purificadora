@@ -43,6 +43,10 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'email' => 'admin@emperador.com',
         ])->assignRole( $admin );
+
+        User::factory()->create([
+            'email' => 'client@emperador.com',
+        ])->assignRole( $client );
         
         $this->call(AddressSeeder::class);
         \App\Models\User::factory(10)->create();

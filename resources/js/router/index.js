@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 import guestModule from '../modules/guest/router'
 import adminModule from '../modules/admin/router'
+import clientModule from '../modules/client/router'
 
 Vue.use( VueRouter )
 
@@ -15,6 +16,10 @@ const routes = [
         path: '/admin',
         ...adminModule
     },
+    {
+        path: '/client',
+        ...clientModule
+    }
 ]
 
 const router = new VueRouter({

@@ -1,12 +1,23 @@
+import axios from 'axios'
 import store from '../../../store'
 
-const guestGuard = async (_,from, next) => {
+const guestGuard = async (to,from, next) => {
 
-    const isAuthenticated = await store.dispatch('checkAuthenticated')
+    let response
 
-    if( !isAuthenticated ) next()
+    try{
+        response = await axios('/role-abilities')
+        
+    }catch(error){
+        response = error.response
+    }
 
-    next(from.path)
+    if( response.status === 401 ){
+        next()
+        return
+    }
+
+    next( from.name )
 }
 
 export default guestGuard

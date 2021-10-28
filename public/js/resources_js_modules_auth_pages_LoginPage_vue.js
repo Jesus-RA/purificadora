@@ -100,6 +100,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -108,12 +109,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       password: ''
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)('authModule', ['login'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)('authModule', ['login', 'checkRole'])), (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)('authModule', ['userRole'])), {}, {
     handleLogin: function handleLogin() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var user, isLogged;
+        var roleHome, isLogged;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -126,21 +127,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return _context.abrupt("return");
 
               case 2:
-                user = {
-                  email: _this.email,
-                  password: _this.password
+                roleHome = {
+                  admin: 'administrar-contenido',
+                  client: 'client-profile'
                 };
                 _context.next = 5;
-                return _this.login(user);
+                return _this.login({
+                  email: _this.email,
+                  password: _this.password
+                });
 
               case 5:
                 isLogged = _context.sent;
-                console.log('logued', isLogged);
-                if (isLogged) _this.$router.push({
-                  name: 'administrar-contenido'
-                });
+                _context.next = 8;
+                return _this.checkRole();
 
               case 8:
+                if (isLogged) _this.$router.push({
+                  name: roleHome[_this.userRole()]
+                });
+
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -726,6 +733,15 @@ var render = function() {
               attrs: { type: "password", placeholder: "Contraseña" },
               domProps: { value: _vm.password },
               on: {
+                keyup: function($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.handleLogin.apply(null, arguments)
+                },
                 input: function($event) {
                   if ($event.target.composing) {
                     return

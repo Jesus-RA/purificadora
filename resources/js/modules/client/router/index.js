@@ -1,9 +1,12 @@
+import clientGuard from './client-guard';
+
 export default {
-    name: 'client',
+    beforeEnter: clientGuard,
     component: () => import('../layouts/ClientLayout.vue'),
     children: [
         {
-            path: '',
+            path: 'profile',
+            name: 'client-profile',
             component: () => import('../pages/ClientPage.vue')
         }
     ]

@@ -69,16 +69,16 @@
                         >
                     </div>
 
-                    <span v-if="error" class="d-block invalid-feedback text-center">
+                    <!-- <span v-if="error" class="d-block invalid-feedback text-center">
                         {{ errorMessage }}
-                    </span>
+                    </span> -->
 
-                    <button
+                    <!-- <button
                         class="btn btn-primary btn-block mt-4 text-white"
                         @click="saveChanges"
                     >
                         Guardar Cambios
-                    </button>
+                    </button> -->
 
                 </div>
 

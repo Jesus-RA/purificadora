@@ -29,4 +29,13 @@ class LoginController extends Controller
         ], 401);
 
     }
+
+    public function logout(Request $request){
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->noContent();
+
+    }
 }

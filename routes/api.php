@@ -23,4 +23,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('role-abilities', [RoleWithAbilitiesController::class, 'index'])->name('role_abilities');
 
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
 });
