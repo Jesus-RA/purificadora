@@ -40,7 +40,7 @@ export default {
 <style scoped>
   img{
     max-height: auto;
-    max-width: 8rem;
+    max-width: 7rem;
   }  
 
   .ml-auto{
