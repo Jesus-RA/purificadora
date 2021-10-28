@@ -1,7 +1,7 @@
 import guestGuard from './guest-guard'
 
 export default {
-    // beforeEnter: guestGuard,
+    beforeEnter: guestGuard,
     component: () => import('../layouts/GuestLayout.vue'),
     children: [
         {
