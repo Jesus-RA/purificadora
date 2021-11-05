@@ -4,7 +4,7 @@ import router from "../../../router"
 export const login = async ( { commit }, user ) => {
 
     let isLogged
-    commit('setLoading', true)
+    commit('setLoading', true, { root: true })
 
     try{
         const { data } = await axios.post('/login', user)
@@ -23,7 +23,7 @@ export const login = async ( { commit }, user ) => {
         isLogged = false
 
     }finally{
-        commit('setLoading', false)
+        commit('setLoading', false, { root: true })
     }
 
     return isLogged
@@ -32,12 +32,12 @@ export const login = async ( { commit }, user ) => {
 
 export const register = async ( { commit }, user ) => {
 
-    commit('setLoading', true)
+    commit('setLoading', true, { root: true })
 
     return await axios.post('/register', user)
         .then( ({ data }) => {
 
-            commit('setLoading', false)
+            commit('setLoading', false, { root: true })
             commit('setUser', data)
 
             return true
@@ -45,7 +45,7 @@ export const register = async ( { commit }, user ) => {
         })
         .catch( ({ response }) => {
 
-            commit('setLoading', false)
+            commit('setLoading', false, { root: true })
             console.log(response)
 
             commit('setError', { error: true, message: response.data.error.message })

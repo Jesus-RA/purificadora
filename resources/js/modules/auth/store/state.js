@@ -6,5 +6,4 @@ export default () => ({
     },
     error: null,
     errorMessage: '',
-    isLoading: false,
 })
