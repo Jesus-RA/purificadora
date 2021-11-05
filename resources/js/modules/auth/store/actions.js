@@ -72,6 +72,7 @@ export const checkRole = async ( { commit } ) => {
 
     try{
         const { data } = await axios.get('/role-abilities')
+        commit('setUserId', { id: data.id })
         commit('setUserRoleAbilities', data)
     }catch({ response }){
         if( response.status === 401 ) router.push({ name: 'login' })
