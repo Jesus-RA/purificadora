@@ -8,6 +8,11 @@ export default {
             path: 'profile',
             name: 'client-profile',
             component: () => import('../pages/ClientPage.vue')
+        },
+        {
+            path: 'edit-profile',
+            name: 'edit-profile',
+            component: () => import('../pages/EditProfile.vue')
         }
     ]
 }

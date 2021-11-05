@@ -2,7 +2,7 @@ import store from '../../../store'
 
 const clientGuard = async (to, from, next) => {
 
-    const clientPages = [ 'client-profile' ]
+    const clientPages = [ 'client-profile', 'edit-profile' ]
 
     await store.dispatch('authModule/checkRole')
     
