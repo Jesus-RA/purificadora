@@ -95,7 +95,22 @@ export default {
                 address: this.address
             }
 
-            await this.updateProfileData(profileData)
+            const profileUpdatedSuccessfully = await this.updateProfileData(profileData)
+
+            this.$swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                title: `${ profileUpdatedSuccessfully
+                    ? 'Perfil actualizado satisfactoriamente.'
+                    : 'Ocurrió un error, vuelva a intentarlo.'
+                }`,
+                icon: `${ profileUpdatedSuccessfully
+                    ? 'success'
+                    : 'error'
+                }`,
+                timer: 3000,
+            })
 
             this.isLoading = false
 

@@ -26,18 +26,21 @@ export const loadProfileData = async ( { commit, rootState } ) => {
 
 export const updateProfileData = async ( { commit, dispatch, state, rootState }, data ) => {
 
+    let profileUpdated
+
     try{
-        commit('setLoading', true, { root: true })
 
         const user_id = rootState.authModule.user.id
-        await axios.get(`/profiles/${ user_id }`)
+        await axios.put(`/profiles/${ user_id }`, data)
 
-        commit('setLoading', false, { root: true })
+        profileUpdated = true
 
         dispatch('loadProfileData')
 
     }catch(error){
-        console.table(error)
+        profileUpdated = false
     }
+
+    return profileUpdated
 
 }
