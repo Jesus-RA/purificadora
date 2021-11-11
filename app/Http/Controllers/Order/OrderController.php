@@ -34,7 +34,9 @@ class OrderController extends Controller
     {
         $this->authorize('create', Order::class);
         
-        $order = Order::create( $request->all() );
+        $order = Order::make( $request->all() );
+        $order->total = 12 * $request->quantity;
+        auth()->user()->orders()->save( $order );
 
         return response()->json( $order, 201 );
     }

@@ -27,9 +27,7 @@ class OrderRequest extends FormRequest
             'quantity' => 'required|integer',
             'date' => 'required|date',
             'phone' => 'required|string',
-            'total' => 'required',
             'address' => 'required|string',
-            'user_id' => 'required'
         ];
     }
 }
