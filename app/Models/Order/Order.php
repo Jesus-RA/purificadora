@@ -19,6 +19,11 @@ class Order extends Model
         'user_id',
     ];
 
+    protected $casts = [
+        'quantity' => 'integer',
+        'total' => 'float'
+    ];
+
     public function client(){
         return $this->belongsTo(User::class, 'user_id');
     }
