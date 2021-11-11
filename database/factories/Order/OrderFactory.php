@@ -26,7 +26,7 @@ class OrderFactory extends Factory
     {
         return [
             'quantity' => random_int(1, 20),
-            'date' => Carbon::now(),
+            'date' => $this->faker->date(),
             'phone' => $this->faker->phoneNumber(),
             'total' => $this->faker->randomFloat(4, 0.00, 4000.00),
             'address' => $this->faker->address(),

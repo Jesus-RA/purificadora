@@ -18,7 +18,7 @@ class OrderSeeder extends Seeder
     {
         Profile::all()->each(function($profile){
 
-            Order::factory()->create([
+            Order::factory()->times(10)->create([
                 'user_id' => $profile->user_id,
             ]);
             
