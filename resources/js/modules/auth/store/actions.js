@@ -1,45 +1,43 @@
 import axios from "axios"
+import router from "../../../router"
 
 export const login = async ( { commit }, user ) => {
 
-    commit('setLoading', true)
+    let isLogged
+    commit('setLoading', true, { root: true })
 
-    const res = await axios.post('/login', user)
-        .then( ({ data }) => {
+    try{
+        const { data } = await axios.post('/login', user)
 
-            commit('setLoading', false)
-            commit('setUser', data)
-            commit('setError', { error: false, message: '' })
+        commit('setUserId', data)
+        commit('setError', { error: false, message: '' })
 
-            return true
+        isLogged = true
 
-        })
-        .catch( ({ response }) => {
+    }catch({ response }){
+        console.log(response)
+        if(response.status == 401){
+            commit('setError', { error: true, message: response.data.error })
+        }
 
-            commit('setLoading', false)
+        isLogged = false
 
-            if(response.status == 401){
-                commit('setError', { error: true, message: response.data.error })
-            }
+    }finally{
+        commit('setLoading', false, { root: true })
+    }
 
-            return false
-
-        } )
-
-    console.log('about to return, user registered')
-    console.log(res)
-    return res
+    return isLogged
 
 }
 
 export const register = async ( { commit }, user ) => {
 
-    commit('setLoading', true)
+    commit('setLoading', true, { root: true })
 
     return await axios.post('/register', user)
         .then( ({ data }) => {
 
-            commit('setLoading', false)
+            commit('setLoading', false, { root: true })
             commit('setUser', data)
 
             return true
@@ -47,7 +45,7 @@ export const register = async ( { commit }, user ) => {
         })
         .catch( ({ response }) => {
 
-            commit('setLoading', false)
+            commit('setLoading', false, { root: true })
             console.log(response)
 
             commit('setError', { error: true, message: response.data.error.message })
@@ -55,5 +53,29 @@ export const register = async ( { commit }, user ) => {
             return false
 
         })
+
+}
+
+export const logout = async ( { commit } ) => {
+
+    const response = await axios.post('/logout')
+
+    if( response.status === 204 ){
+        commit('setUserId', { id: null })
+        commit('setUserRoleAbilities', { role: null, abilities: [] })
+        router.push({ name: 'home' })
+    }
+
+}
+
+export const checkRole = async ( { commit } ) => {
+
+    try{
+        const { data } = await axios.get('/role-abilities')
+        commit('setUserId', { id: data.id })
+        commit('setUserRoleAbilities', data)
+    }catch({ response }){
+        if( response.status === 401 ) router.push({ name: 'login' })
+    }
 
 }

@@ -14,7 +14,7 @@ Route::post('register', [RegisterController::class, 'register'])->name('register
 Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('orders/user/{user}', [OrderController::class, 'user_orders'])->name('orders.user_orders');
     Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
     Route::match(['put', 'patch'], 'orders/{order}', [OrderController::class, 'update'])->name('orders.update');
 
@@ -22,5 +22,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::match(['put', 'patch'], 'profiles/{profile}', [ProfileController::class, 'update'])->name('profiles.update');
 
     Route::get('role-abilities', [RoleWithAbilitiesController::class, 'index'])->name('role_abilities');
+
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 });

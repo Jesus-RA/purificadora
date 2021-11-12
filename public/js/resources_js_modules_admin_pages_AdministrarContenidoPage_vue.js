@@ -310,30 +310,7 @@ var render = function() {
                 }
               }
             })
-          ]),
-          _vm._v(" "),
-          _vm.error
-            ? _c(
-                "span",
-                { staticClass: "d-block invalid-feedback text-center" },
-                [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.errorMessage) +
-                      "\n                "
-                  )
-                ]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary btn-block mt-4 text-white",
-              on: { click: _vm.saveChanges }
-            },
-            [_vm._v("\n                    Guardar Cambios\n                ")]
-          )
+          ])
         ])
       ])
     ])

@@ -101,7 +101,8 @@ export default {
         
     },
     computed: {
-        ...mapState('authModule', ['error', 'errorMessage', 'isLoading'])
+        ...mapState('authModule', ['error', 'errorMessage']),
+        ...mapState(['isLoading']),
     },
     components: {
         Loader: () => import('../../shared/components/Loader.vue')

@@ -1,5 +1,8 @@
+import adminGuard from './admin-guard';
+
 export default {
     name: 'admin',
+    beforeEnter: adminGuard,
     component: () => import('../layouts/AdminLayout.vue'),
     children: [
         {

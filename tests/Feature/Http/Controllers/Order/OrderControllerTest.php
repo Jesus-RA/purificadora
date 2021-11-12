@@ -277,4 +277,26 @@ class OrderControllerTest extends TestCase
             ->assertStatus(403);
     }
 
+    public function test_it_can_get_user_orders()
+    {
+        $user = User::factory()->create();
+        $user->orders()->saveMany( Order::factory()->times(10)->create() );
+
+        $this
+            ->actingAs( $user )
+            ->get( route('orders.user_orders', $user->id) )
+            ->assertStatus( 200 )
+            ->assertJsonStructure([
+                'orders' => [
+                    '*' => [
+                        'date',
+                        'quantity',
+                        'total'
+                    ]
+                ],
+                'quantity',
+                'total'
+            ]);
+    }
+
 }

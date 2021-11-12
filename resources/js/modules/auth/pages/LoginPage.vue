@@ -36,6 +36,7 @@
                             class="form-control"
                             placeholder="Contraseña"
                             v-model="password"
+                            @keyup.enter="handleLogin"
                         >
                     </div>
 
@@ -73,7 +74,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
     data(){
@@ -83,22 +84,28 @@ export default {
         }
     },
     methods: {
-        ...mapActions('authModule', ['login']),
+        ...mapActions('authModule', ['login', 'checkRole']),
+        ...mapGetters('authModule', ['userRole']),
         async handleLogin(){
             if( !this.email.length && !this.password.length )
                 return
 
-            const user = { email: this.email, password: this.password }
+            const roleHome = {
+                admin: 'administrar-contenido',
+                client: 'client-profile'
+            }
 
-            const isLogged = await this.login( user )
-            console.log('logued', isLogged)
+            const isLogged = await this.login( { email: this.email, password: this.password } )
+            await this.checkRole()
+
             if( isLogged )
-                this.$router.push({ name: 'administrar-contenido' })
+                this.$router.push({ name: roleHome[ this.userRole() ] })
 
         }
     },
     computed: {
-        ...mapState('authModule', ['error', 'errorMessage', 'isLoading'])
+        ...mapState('authModule', ['error', 'errorMessage']),
+        ...mapState(['isLoading'])
     },
     components: {
         Loader: () => import('../../shared/components/Loader.vue')

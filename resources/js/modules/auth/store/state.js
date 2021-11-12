@@ -1,6 +1,9 @@
 export default () => ({
-    admin: null,
+    user: {
+        id: null,
+        role: null,
+        abilities: [],
+    },
     error: null,
     errorMessage: '',
-    isLoading: false,
 })
