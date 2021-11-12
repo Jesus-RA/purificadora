@@ -24,6 +24,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     Navbar: function Navbar() {
@@ -121,6 +131,21 @@ var render = function() {
   return _c(
     "Navbar",
     [
+      _c(
+        "b-nav-item",
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "nav-link",
+              attrs: { to: { name: "client-profile" } }
+            },
+            [_vm._v("\n      Perfil\n    ")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c("b-nav-item", [
         _c(
           "button",
@@ -133,7 +158,10 @@ var render = function() {
               }
             }
           },
-          [_vm._v("\n      Cerrar Sesión\n    ")]
+          [
+            _vm._v("\n      Cerrar Sesión\n      "),
+            _c("i", { staticClass: "fas fa-sign-out-alt" })
+          ]
         )
       ])
     ],

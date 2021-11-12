@@ -75,7 +75,205 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("h1", [_vm._v("Pedidos")])])
+    return _c("div", { staticClass: "container my-5" }, [
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "div",
+          { staticClass: "card col-md-8 mx-auto py-5 px-2 shadow border-0" },
+          [
+            _c("h2", { staticClass: "mb-4 text-center" }, [
+              _vm._v("Ingresar un pedido")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "card col-10 col-md-8 col-lg-5 p-4 shadow border-0"
+                },
+                [
+                  _c("form", [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "text-primary",
+                          attrs: { for: "quantity" }
+                        },
+                        [_vm._v("Cantidad:")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "number",
+                          id: "quantity",
+                          placeholder: "Número de garrafones"
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "text-primary",
+                          attrs: { for: "address" }
+                        },
+                        [_vm._v("Dirección:")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "address",
+                          placeholder: "Dirección de entrega"
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "text-primary",
+                          attrs: { for: "phone" }
+                        },
+                        [_vm._v("Teléfono:")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "phone",
+                          placeholder: "Dirección de entrega"
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "label",
+                        { staticClass: "text-primary", attrs: { for: "date" } },
+                        [_vm._v("Fecha:")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "date",
+                          placeholder: "Dirección de entrega"
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _c("span", { staticClass: "text-primary" }, [
+                        _vm._v("Total:")
+                      ]),
+                      _vm._v(" $140,242.00 MXN\n                        ")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      { staticClass: "btn btn-primary btn-block text-white" },
+                      [
+                        _vm._v(
+                          "\n                            Hacer pedido\n                        "
+                        )
+                      ]
+                    )
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("h2", { staticClass: "col-12 text-center my-5" }, [
+                _vm._v("Historial de pedidos")
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card shadow border-0 mx-auto col-10" },
+                [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("table", { staticClass: "w-100" }, [
+                      _c("thead", [
+                        _c("th", { staticClass: "text-left" }, [
+                          _vm._v("Realizados por")
+                        ]),
+                        _vm._v(" "),
+                        _c("th", { staticClass: "text-center" }, [
+                          _vm._v("Garrafones")
+                        ]),
+                        _vm._v(" "),
+                        _c("th", { staticClass: "text-center" }, [
+                          _vm._v("Total")
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("tbody", [
+                        _c("tr", [
+                          _c("td", { staticClass: "text-left" }, [
+                            _vm._v("Usuarios registrados")
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v("347")
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v("$5,943.00 MXN")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("td", { staticClass: "text-left" }, [
+                            _vm._v("Usuarios no registrados")
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v("347")
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v("$5,943.00 MXN")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tr",
+                          {
+                            staticClass:
+                              "text-center font-weight-bold border border-primary border-left-0 border-bottom-0 border-right-0"
+                          },
+                          [
+                            _c("td", { staticClass: "text-left" }, [
+                              _vm._v("Totales")
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v("694")
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v("$11,886.00 MXN")
+                            ])
+                          ]
+                        )
+                      ])
+                    ])
+                  ])
+                ]
+              )
+            ])
+          ]
+        )
+      ])
+    ])
   }
 ]
 render._withStripped = true

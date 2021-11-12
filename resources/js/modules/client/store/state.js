@@ -2,5 +2,8 @@ export default () => ({
     name: '',
     lastname: '',
     phone: '',
-    address: ''
+    address: '',
+    orders: [],
+    ordersQuantity: null,
+    ordersTotal: null,
 })
