@@ -2,7 +2,7 @@
     <div class="container my-5">
         <div class="row">
 
-            <Loader v-if="isLoading || !profileHasData" class="mx-auto" />
+            <Loader v-if="isLoadingUserInfo || !profileHasData" class="mx-auto" />
 
             <div v-else class="col-lg-8 mx-auto">
                 <div class="card shadow p-5 border-0">
@@ -51,51 +51,87 @@
                         </div>
 
                         <div class="col-12 mt-4">
-                            <h3>Consulta tus pedidos del perido que deses.</h3>
+                            <h3>Consulta tus pedidos del periodo que desees.</h3>
                             <div class="row">
 
                                 <div class="col-12">
-                                    <div class="row d-flex align-items-center">
-                                        <div class="form-group col-md-5">
-                                            <label for="from" class="text-primary">Desde:</label>
-                                            <input type="date" id="from" class="form-control">
+                                    <form @submit.prevent>
+                                        <div class="row d-flex align-items-center">
+                                            <div class="form-group col-md-5">
+                                                <label for="from" class="text-primary">Desde:</label>
+                                                <input
+                                                    type="date"
+                                                    id="from"
+                                                    class="form-control"
+                                                    v-model.trim="$v.from.$model"
+                                                >
+                                                <span v-if="$v.from.$dirty && !$v.from.required" class="d-block invalid-feedback">
+                                                    Es necesario indicar la fecha de inicio.
+                                                </span>
+                                            </div>
+                                            <div class="form-group col-md-5">
+                                                <label for="to" class="text-primary">Hasta:</label>
+                                                <input
+                                                    type="date"
+                                                    id="to"
+                                                    class="form-control"
+                                                    v-model.trim="$v.to.$model"
+                                                >
+                                                <span v-if="$v.to.$dirty && !$v.to.required" class="d-block invalid-feedback">
+                                                    Es necesario indicar la fecha de fin.
+                                                </span>
+                                            </div>
+
+                                            <div class="from-group col-md-2 p-md-0 mt-md-3">
+                                                <button
+                                                    class="btn btn-primary btn-sm btn-block text-white"
+                                                    @click="searchOrders"
+                                                    :disabled="$v.$invalid || !validDateRange"
+                                                >
+                                                    <Loader v-if="isLoading" />
+                                                    <span v-else>Consultar</span>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="form-group col-md-5">
-                                            <label for="to" class="text-primary">Hasta:</label>
-                                            <input type="date" id="to" class="form-control">
-                                        </div>
-                                        
-                                        <div class="from-group col-md-2 p-md-0 mt-md-3">
-                                            <button class="btn btn-primary btn-sm btn-block text-white">
-                                                Consultar
-                                            </button>
-                                        </div>
-                                    </div>
+                                        <span v-if="!validDateRange" class="d-block invalid-feedback">
+                                            La fecha de inicio debe ser menor a la fecha de fin.
+                                        </span>
+                                    </form>
                                 </div>
 
                                 <div class="col-md-8 card shadow border-0 mx-auto mt-4">
-                                    <div class="card-body">
+                                    <div class="card-body orders-details">
                                         <h3 class="text-center mb-3">Historial de pedidos</h3>
 
-                                        <p class="mb-3 border-bottom border-primary p-3">
-                                            Fecha: 03 de Septiembre de 2021
-                                            Cantidad: 20 garrafones
-                                            Total: $400.00 MXN
-                                        </p>
-
-                                        <p class="mb-3 border-bottom border-primary p-3">
-                                            Fecha: 03 de Septiembre de 2021
-                                            Cantidad: 20 garrafones
-                                            Total: $400.00 MXN
-                                        </p>
+                                        <div class="orders-board mb-md-3">
+                                            <div v-if="!orders.length" class="alert alert-info text-center">
+                                                No se encontraron pedidos
+                                            </div>
+                                            <div
+                                                v-else
+                                                v-for="({ date, quantity, total }, index) of orders"
+                                                :key="index"
+                                                class="mb-3 border-bottom border-primary"
+                                            >
+                                                <p>
+                                                    Fecha: {{ date }}
+                                                </p>
+                                                <p>
+                                                    Cantidad: {{ quantity }} {{ quantity > 1 ? 'garrafones' : 'garrafón' }}
+                                                </p>
+                                                <p>
+                                                    Total: {{ total }}
+                                                </p>
+                                            </div>
+                                        </div>
 
                                         <h3 class="text-center">Totales</h3>
 
                                         <p>
-                                            Garrafones del periodo: 40 garrafones
+                                            Garrafones del periodo: {{ ordersQuantity }} garrafones
                                         </p>
                                         <p>
-                                            Total: $800.00 MXN
+                                            Total: {{ ordersTotal }}
                                         </p>
 
                                     </div>
@@ -113,7 +149,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
 
@@ -123,13 +160,32 @@ export default {
             lastname: '',
             phone: '',
             address: '',
+            from: null,
+            to: null,
+            isLoadingUserInfo: false,
         }
     },
+    validations: {
+        from: { required },
+        to: { required }
+    },
     methods: {
-        ...mapActions('clientModule', ['loadProfileData']),
+        ...mapActions('clientModule', ['loadProfileData', 'loadUserOrders']),
+        async searchOrders(){
+
+            this.$v.$touch()
+            
+            if( this.$v.$invalid || !this.validDateRange ) return
+            
+            await this.loadUserOrders({
+                from: this.from,
+                to: this.to
+            })
+        }
     },
     computed: {
         ...mapState(['isLoading']),
+        ...mapState('clientModule', ['orders', 'ordersQuantity', 'ordersTotal']),
         ...mapGetters('clientModule', ['getProfileData', 'profileHasData']),
         fullname(){
             return `${ this.name } ${ this.lastname }`
@@ -140,11 +196,22 @@ export default {
         phoneFormatted(){
             const phoneArray = this.phone.split('')
             return `${ phoneArray.slice(0, 3).join('') }-${ phoneArray.slice(3, 6).join('') }-${ phoneArray.slice(6).join('') }`
+        },
+        validDateRange(){
+
+            return ( this.from === null && this.to === null )
+                ? true
+                : this.from < this.to
         }
     },
     async created(){
 
-        await this.loadProfileData()
+        this.isLoadingUserInfo = true
+
+        await Promise.all([
+            this.loadProfileData(),
+            this.loadUserOrders({})
+        ])
 
         if( !this.profileHasData ){
             this.$swal.fire({
@@ -166,6 +233,8 @@ export default {
         this.lastname = lastname
         this.phone = phone
         this.address = address
+
+        this.isLoadingUserInfo = false
         
     },
     components: {
@@ -186,6 +255,27 @@ export default {
     height: 6rem;
     justify-content: center;
     width: 6rem;
+}
+
+.orders-details{
+    max-height: 35rem;
+    overflow: hidden;
+}
+
+.orders-board{
+    max-height: 60%;
+    overflow: scroll;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, .5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
 </style>
