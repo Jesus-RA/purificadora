@@ -1,5 +1,6 @@
 <template>
-  <b-navbar toggleable="lg" type="light" variant="white" :sticky="sticky">
+  <b-navbar toggleable="lg" type="light" variant="transparent" :fixed="fixedPosition">
+  <!-- <b-navbar toggleable="lg" type="light" variant="transparent" :sticky="sticky"> -->
     <b-navbar-brand :to="{ name: 'home' }">
       <img :src="logo" alt="">
     </b-navbar-brand>
@@ -24,15 +25,18 @@ export default {
     return {
       logo,
       sticky: null,
+      fixedPosition: null,
     }
   },
   watch: {
     '$route'(to){
       this.sticky = to.name === 'home'
+      this.fixedPosition = this.$route.name === 'home' ? 'top' : ''
     }
   },
   created(){
     this.sticky = this.$router.history.current.name === 'home'
+    this.fixedPosition = this.$route.name === 'home' ? 'top' : ''
   }
 }
 </script>
