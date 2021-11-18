@@ -47,7 +47,7 @@
                         class="btn btn-primary btn-block mt-4 text-white"
                         @click="handleRegister"
                     >
-                        <Loader v-if="isLoading"/>
+                        <Loader v-if="isLoading" color="light" />
 
                         <span v-else>Crear cuenta</span>
                     </button>
@@ -96,7 +96,7 @@ export default {
             const hasBeenRegistered = await this.register( user )
             console.log('registered', hasBeenRegistered)
             if( hasBeenRegistered )
-                this.$router.push({ name: 'home' })
+                this.$router.push({ name: 'login' })
         }
         
     },

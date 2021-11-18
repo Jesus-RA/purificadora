@@ -139,7 +139,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 hasBeenRegistered = _context.sent;
                 console.log('registered', hasBeenRegistered);
                 if (hasBeenRegistered) _this.$router.push({
-                  name: 'home'
+                  name: 'login'
                 });
 
               case 8:
@@ -405,7 +405,7 @@ var render = function() {
             },
             [
               _vm.isLoading
-                ? _c("Loader")
+                ? _c("Loader", { attrs: { color: "light" } })
                 : _c("span", [_vm._v("Crear cuenta")])
             ],
             1
