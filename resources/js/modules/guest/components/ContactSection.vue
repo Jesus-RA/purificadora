@@ -19,7 +19,7 @@
 
                 <p class="ml-3 text-primary text-left px-lg-5">
                     <i class="fas fa-phone text-dark mr-2"></i>
-                    {{ phone }}
+                    {{ phoneFormatted }}
                 </p>
 
                 <p class="text-justify px-lg-5">
@@ -40,12 +40,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 export default {
-    data(){
-        return {
-            phone: '222-456-1221',
-        }
+    computed: {
+        ...mapState('guestModule', ['phone_number']),
+        phoneFormatted(){
+            const phoneArray = this.phone_number.split('')
+            return `${ phoneArray.slice(0, 3).join('') }-${ phoneArray.slice(3, 6).join('') }-${ phoneArray.slice(6).join('') }`
+        },
     }
 }
 </script>

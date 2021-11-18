@@ -22,15 +22,22 @@
         <AboutSection id="about" />
 
         <ContactSection id="contact" />
-
     </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
     components: {
         AboutSection: () => import('../components/AboutSection.vue'),
         ContactSection: () => import('../components/ContactSection.vue')
+    },
+    methods: {
+        ...mapActions('guestModule', ['loadLandingContent'])
+    },
+    async created(){
+        await this.loadLandingContent()
     }
 }
 </script>

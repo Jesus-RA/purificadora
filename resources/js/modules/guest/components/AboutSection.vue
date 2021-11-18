@@ -25,7 +25,7 @@
                 <div class="h-100 d-flex align-items-center">
                     <carousel-3d width="400" autoplay>
                         <slide
-                            v-for="(image, index) in carousel_images"
+                            v-for="(image, index) in gallery_images"
                             :key="index"
                             :index="index"
                         >
@@ -68,19 +68,17 @@
 
 <script>
 import water_bottle from '../../../../../public/images/water-bottle.png'
+import { mapState } from 'vuex'
 
 export default {
     data(){
         return {
             water_bottle: water_bottle,
-            video: 'https://www.youtube.com/embed/qm0IfG1GyZU',
-            carousel_images: [
-                'https://cdn.dribbble.com/users/22455/screenshots/16201402/media/de4b77a4ed2f3e3c5ab0405805b843ee.png',
-                'https://mir-s3-cdn-cf.behance.net/projects/original/11167475.548101dba9caa.jpg',
-                'https://mir-s3-cdn-cf.behance.net/projects/original/a1ce5333363895.Y3JvcCwxMDUwLDgyMiw3MiwyOA.jpg'
-            ]
         }
-    }    
+    },
+    computed: {
+        ...mapState('guestModule', ['gallery_images', 'video'])
+    }
 }
 </script>
 

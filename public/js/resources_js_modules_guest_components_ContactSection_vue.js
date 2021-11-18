@@ -11,6 +11,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -52,12 +59,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  data: function data() {
-    return {
-      phone: '222-456-1221'
-    };
-  }
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)('guestModule', ['phone_number'])), {}, {
+    phoneFormatted: function phoneFormatted() {
+      var phoneArray = this.phone_number.split('');
+      return "".concat(phoneArray.slice(0, 3).join(''), "-").concat(phoneArray.slice(3, 6).join(''), "-").concat(phoneArray.slice(6).join(''));
+    }
+  })
 });
 
 /***/ }),
@@ -163,7 +172,9 @@ var render = function() {
         _vm._v(" "),
         _c("p", { staticClass: "ml-3 text-primary text-left px-lg-5" }, [
           _c("i", { staticClass: "fas fa-phone text-dark mr-2" }),
-          _vm._v("\n                " + _vm._s(_vm.phone) + "\n            ")
+          _vm._v(
+            "\n                " + _vm._s(_vm.phoneFormatted) + "\n            "
+          )
         ]),
         _vm._v(" "),
         _c("p", { staticClass: "text-justify px-lg-5" }, [
