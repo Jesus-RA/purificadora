@@ -43,11 +43,49 @@
 
                         <div class="col-12 mt-4">
                             <h2>Pedidos</h2>
-                            <button class="btn btn-primary btn-sm text-white">
+                            <button
+                                v-b-modal.make-order
+                                class="btn btn-primary btn-sm text-white"
+                            >
                                 Hacer un pedido
                                 <i class="fas fa-shopping-bag"></i>
                             </button>
 
+                            <b-modal id="make-order" title="Hacer pedido" centered>
+
+                                <form class="px-4">
+                                    <div class="form-group">
+                                        <label for="quantity">Cantidad:</label>
+                                        <input type="number" id="quantity" placeholder="0" class="form-control" v-model="order.quantity">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="date">Fecha:</label>
+                                        <input type="date" id="date" class="form-control" v-model="order.date">
+                                    </div>
+
+                                    <p>
+                                        <span class="text-primary">Total:</span> {{ currencyFormatter.format( order.quantity * product_price ) }}
+                                    </p>
+                                </form>
+                                
+                                <template #modal-footer="{ ok, cancel }">
+                                    <div class="w-100 row justify-content-around">
+                                        <button
+                                            class="btn btn-danger btn-sm mx-4"
+                                            @click="cancel()"
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            class="btn btn-primary btn-sm text-white mx-4"
+                                            @click="handleMakeOrder(ok)"
+                                        >
+                                            Hacer pedido
+                                        </button>
+                                    </div>
+                                </template>
+                            </b-modal>
                         </div>
 
                         <div class="col-12 mt-4">
@@ -151,6 +189,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
+import CurrencyFormatter from '../../../helpers/CurrencyFormatter'
 
 export default {
 
@@ -163,6 +202,11 @@ export default {
             from: null,
             to: null,
             isLoadingUserInfo: false,
+            order: {
+                quantity: null,
+                date: null
+            },
+            currencyFormatter: CurrencyFormatter
         }
     },
     validations: {
@@ -170,7 +214,7 @@ export default {
         to: { required }
     },
     methods: {
-        ...mapActions('clientModule', ['loadProfileData', 'loadUserOrders']),
+        ...mapActions('clientModule', ['loadProfileData', 'loadUserOrders', 'makeOrder', 'fetchProductPrice']),
         async searchOrders(){
 
             this.$v.$touch()
@@ -181,11 +225,32 @@ export default {
                 from: this.from,
                 to: this.to
             })
+        },
+        async handleMakeOrder(closeModal){
+            closeModal()
+
+            const hasBeebOrderCreated = await this.makeOrder(this.order)
+
+            if(hasBeebOrderCreated){
+                this.order = {
+                    quantity: null,
+                    date: null
+                }
+            }
+
+            this.$swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                title: hasBeebOrderCreated ? 'Pedido realizado' : 'No se ha podido realizar el pedido, intente nuevamente',
+                icon: hasBeebOrderCreated ? 'success' : 'error',
+                timer: 3000
+            })
         }
     },
     computed: {
         ...mapState(['isLoading']),
-        ...mapState('clientModule', ['orders', 'ordersQuantity', 'ordersTotal']),
+        ...mapState('clientModule', ['orders', 'ordersQuantity', 'ordersTotal', 'product_price']),
         ...mapGetters('clientModule', ['getProfileData', 'profileHasData']),
         fullname(){
             return `${ this.name } ${ this.lastname }`
@@ -210,7 +275,8 @@ export default {
 
         await Promise.all([
             this.loadProfileData(),
-            this.loadUserOrders({})
+            this.loadUserOrders({}),
+            this.fetchProductPrice()
         ])
 
         if( !this.profileHasData ){
@@ -276,6 +342,10 @@ export default {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, .5);
   box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+button{
+    flex-grow: 1;
 }
 
 </style>

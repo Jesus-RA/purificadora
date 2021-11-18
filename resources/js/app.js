@@ -1,4 +1,6 @@
 require('./bootstrap');
+// import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 // import 'bootstrap/dist/css/bootstrap.min.css'
 // import 'bootstrap/dist/js/bootstrap.bundle'
 
@@ -10,9 +12,6 @@ import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import Vuelidate from 'vuelidate'
 import Carousel3d from 'vue-carousel-3d'
-
-// import 'bootstrap/dist/css/bootstrap.css'
-// import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)

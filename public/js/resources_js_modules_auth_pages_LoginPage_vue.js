@@ -421,7 +421,7 @@ var render = function() {
             },
             [
               _vm.isLoading
-                ? _c("Loader")
+                ? _c("Loader", { attrs: { color: "light" } })
                 : _c("span", [_vm._v("Iniciar Sesión")])
             ],
             1

@@ -75,6 +75,21 @@ class CompanyDataController extends Controller
         ], 200);
     }
 
+    public function getProductPrice()
+    {
+        $companyData = CompanyData::first();
+
+        if(!$companyData){
+            return response()->json([
+                'message' => 'There is no data available.'
+            ], 404);
+        }
+
+        return response()->json([
+            'product_price' => $companyData->product_price,
+        ], 200);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

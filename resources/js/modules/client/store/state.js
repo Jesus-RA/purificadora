@@ -6,4 +6,5 @@ export default () => ({
     orders: [],
     ordersQuantity: null,
     ordersTotal: null,
+    product_price: null
 })

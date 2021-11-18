@@ -1,4 +1,4 @@
-import CurrencyFormatter from '../../../helpers/CurrencyFormater'
+import CurrencyFormatter from '../../../helpers/CurrencyFormatter'
 
 export const setProfileData = ( state, { name, lastname, phone, address } ) => {
     state.name = name
@@ -24,4 +24,8 @@ export const setOrdersQuantity = ( state, quantity ) => {
 
 export const setOrdersTotal = ( state, total ) => {
     state.ordersTotal = CurrencyFormatter.format( total )
+}
+
+export const setProductPrice = ( state, productPrice ) => {
+    state.product_price = productPrice
 }
