@@ -52,5 +52,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory(10)->create();
         $this->call(ProfileSeeder::class);
         $this->call(OrderSeeder::class);
+        $this->call(CompanyDataSeeder::class);
     }
 }
