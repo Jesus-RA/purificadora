@@ -42,7 +42,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .parallax{
     height: 100vh;
     background-image: url('../../../../../public/images/main-image.jpg');
