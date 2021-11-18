@@ -9,6 +9,7 @@ import { abilitiesPlugin } from '@casl/vue'
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import Vuelidate from 'vuelidate'
+import Carousel3d from 'vue-carousel-3d'
 
 // import 'bootstrap/dist/css/bootstrap.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -21,6 +22,7 @@ Vue.use(IconsPlugin)
 Vue.use(abilitiesPlugin, store.getters['authModule/userAbilities'])
 Vue.use(VueSweetalert2)
 Vue.use(Vuelidate)
+Vue.use(Carousel3d)
 
 import store from './store'
 import router from './router'
