@@ -16,11 +16,11 @@ class CompanyDataSeeder extends Seeder
     {
         CompanyData::create([
             'gallery_images' => [
-                'https://cdn.dribbble.com/users/22455/screenshots/16201402/media/de4b77a4ed2f3e3c5ab0405805b843ee.png',
-                'https://mir-s3-cdn-cf.behance.net/projects/original/11167475.548101dba9caa.jpg',
-                'https://mir-s3-cdn-cf.behance.net/projects/original/a1ce5333363895.Y3JvcCwxMDUwLDgyMiw3MiwyOA.jpg'
+                'https://i.ytimg.com/vi/aAm26J-z9NY/maxresdefault.jpg',
+                'https://www.elheraldodechihuahua.com.mx/local/dv7xgc-purificadora-de-agua-24.jpg/ALTERNATES/LANDSCAPE_1140/purificadora-de-agua-24.jpg',
+                'https://www.manantialwater.com.mx/blog/wp-content/uploads/2020/12/purificadora-de-agua-negocio.jpg'
             ],
-            'video' => 'https://www.youtube.com/embed/qm0IfG1GyZU',
+            'video' => 'https://www.youtube.com/embed/nKy9_PvtsGA',
             'phone_number' => '2224825554',
             'product_price' => 12.50
         ]);
