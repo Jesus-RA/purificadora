@@ -216,8 +216,64 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
+
+
+var minDate = function minDate(value) {
+  if (!value) return true;
+  var timeZone = 'es-MX';
+  var orderDate = new Date(value.replaceAll('-', '/')).toLocaleDateString(timeZone);
+  return orderDate >= new Date().toLocaleDateString(timeZone);
+};
+
+var maxDate = function maxDate(maxDays) {
+  var today = new Date();
+  var maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + maxDays);
+  return vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.helpers.withParams({
+    type: 'maxDate',
+    max: maxDate.toLocaleDateString('es-MX')
+  }, function (value) {
+    return new Date(value) <= maxDate;
+  });
+};
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -242,6 +298,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     to: {
       required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required
+    },
+    order: {
+      quantity: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required,
+        integer: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.integer,
+        minValue: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.minValue)(1),
+        maxValue: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.maxValue)(50)
+      },
+      date: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required,
+        minDate: minDate,
+        maxDate: maxDate(5)
+      }
     }
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('clientModule', ['loadProfileData', 'loadUserOrders', 'makeOrder', 'fetchProductPrice'])), {}, {
@@ -286,11 +355,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                _this2.$v.order.quantity.$touch();
+
+                _this2.$v.order.date.$touch();
+
+                if (!_this2.$v.order.$invalid) {
+                  _context2.next = 4;
+                  break;
+                }
+
+                return _context2.abrupt("return");
+
+              case 4:
                 closeModal();
-                _context2.next = 3;
+                _context2.next = 7;
                 return _this2.makeOrder(_this2.order);
 
-              case 3:
+              case 7:
                 hasBeebOrderCreated = _context2.sent;
 
                 if (hasBeebOrderCreated) {
@@ -298,6 +379,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     quantity: null,
                     date: null
                   };
+
+                  _this2.$v.order.$reset();
                 }
 
                 _this2.$swal.fire({
@@ -309,7 +392,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   timer: 3000
                 });
 
-              case 6:
+              case 10:
               case "end":
                 return _context2.stop();
             }
@@ -687,6 +770,9 @@ var render = function() {
                                         {
                                           staticClass:
                                             "btn btn-primary btn-sm text-white mx-4",
+                                          attrs: {
+                                            disabled: _vm.$v.order.$invalid
+                                          },
                                           on: {
                                             click: function($event) {
                                               return _vm.handleMakeOrder(ok)
@@ -717,9 +803,10 @@ var render = function() {
                                 directives: [
                                   {
                                     name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.order.quantity,
-                                    expression: "order.quantity"
+                                    rawName: "v-model.trim",
+                                    value: _vm.$v.order.quantity.$model,
+                                    expression: "$v.order.quantity.$model",
+                                    modifiers: { trim: true }
                                   }
                                 ],
                                 staticClass: "form-control",
@@ -728,20 +815,72 @@ var render = function() {
                                   id: "quantity",
                                   placeholder: "0"
                                 },
-                                domProps: { value: _vm.order.quantity },
+                                domProps: {
+                                  value: _vm.$v.order.quantity.$model
+                                },
                                 on: {
                                   input: function($event) {
                                     if ($event.target.composing) {
                                       return
                                     }
                                     _vm.$set(
-                                      _vm.order,
-                                      "quantity",
-                                      $event.target.value
+                                      _vm.$v.order.quantity,
+                                      "$model",
+                                      $event.target.value.trim()
                                     )
+                                  },
+                                  blur: function($event) {
+                                    return _vm.$forceUpdate()
                                   }
                                 }
-                              })
+                              }),
+                              _vm._v(" "),
+                              _vm.$v.order.$dirty &&
+                              !_vm.$v.order.quantity.required
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Es necesario indicar la cantidad de garrafones.\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.order.quantity.minValue
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Al menos debe de pedir " +
+                                          _vm._s(
+                                            _vm.$v.order.quantity.$params
+                                              .minValue.min
+                                          ) +
+                                          " garrafón.\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.order.quantity.maxValue
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Por el momento solo puede pedir " +
+                                          _vm._s(
+                                            _vm.$v.order.quantity.$params
+                                              .maxValue.max
+                                          ) +
+                                          " garrafones como máximo.\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
                             ]),
                             _vm._v(" "),
                             _c("div", { staticClass: "form-group" }, [
@@ -753,27 +892,73 @@ var render = function() {
                                 directives: [
                                   {
                                     name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.order.date,
-                                    expression: "order.date"
+                                    rawName: "v-model.trim",
+                                    value: _vm.$v.order.date.$model,
+                                    expression: "$v.order.date.$model",
+                                    modifiers: { trim: true }
                                   }
                                 ],
                                 staticClass: "form-control",
                                 attrs: { type: "date", id: "date" },
-                                domProps: { value: _vm.order.date },
+                                domProps: { value: _vm.$v.order.date.$model },
                                 on: {
                                   input: function($event) {
                                     if ($event.target.composing) {
                                       return
                                     }
                                     _vm.$set(
-                                      _vm.order,
-                                      "date",
-                                      $event.target.value
+                                      _vm.$v.order.date,
+                                      "$model",
+                                      $event.target.value.trim()
                                     )
+                                  },
+                                  blur: function($event) {
+                                    return _vm.$forceUpdate()
                                   }
                                 }
-                              })
+                              }),
+                              _vm._v(" "),
+                              _vm.$v.order.date.$dirty &&
+                              !_vm.$v.order.date.required
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Es necesario indicar la fecha de entrega.\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.order.date.minDate
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        La fecha mínima de entrega es el día actual.\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.order.date.maxDate
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Fecha máxima de entrega: " +
+                                          _vm._s(
+                                            _vm.$v.order.date.$params.maxDate
+                                              .max
+                                          ) +
+                                          " ( 5 días a partir de hoy ).\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
                             ]),
                             _vm._v(" "),
                             _c("p", [

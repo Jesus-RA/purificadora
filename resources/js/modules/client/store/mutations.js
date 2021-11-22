@@ -12,7 +12,7 @@ export const setOrders = ( state, orders ) => {
     const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
 
     state.orders = orders.map( ({ date, quantity, total }) => ({
-        date: new Date( date ).toLocaleDateString('es-MX', dateOptions),
+        date: new Date( date.replaceAll('-', '/') ).toLocaleDateString('es-MX', dateOptions),
         quantity,
         total: CurrencyFormatter.format( total )
     })) 
