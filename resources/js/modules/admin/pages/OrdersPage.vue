@@ -2,7 +2,9 @@
     <div class="container my-5">
         <div class="row">
 
-            <div class="card col-md-8 mx-auto py-5 px-2 shadow border-0">
+            <Loader v-if="isLoading" class="mx-auto" />
+
+            <div v-else class="card col-md-8 mx-auto py-5 px-2 shadow border-0">
 
                 <h2 class="mb-4 text-center">Ingresar un pedido</h2>
                 <div class="row justify-content-center">
@@ -120,8 +122,10 @@
                             <button
                                 class="btn btn-primary btn-block text-white"
                                 @click="handleMakeOrder"
+                                :disabled="$v.order.$invalid"
                             >
-                                Hacer pedido
+                                <Loader v-if="formLoading" />
+                                <span v-else>Hacer pedido</span>
                             </button>
 
                         </form>
@@ -200,7 +204,8 @@ export default {
                 phone: '',
                 date: null
             },
-            currencyFormatter: CurrencyFormatter
+            currencyFormatter: CurrencyFormatter,
+            formLoading: false,
         }
     },
     validations: {
@@ -233,6 +238,7 @@ export default {
 
             if( this.$v.$invalid ) return
 
+            this.formLoading = true
             const hasBeebOrderCreated = await this.makeOrder(this.order)
 
             if(hasBeebOrderCreated){
@@ -254,9 +260,12 @@ export default {
                 icon: hasBeebOrderCreated ? 'success' : 'error',
                 timer: 3000
             })
+
+            this.formLoading = false
         }
     },
     computed: {
+        ...mapState(['isLoading']),
         ...mapState('adminModule', ['product_price']),
         ...mapGetters('adminModule', ['getOrdersData', 'getOrdersTotals'])
     },
@@ -265,6 +274,9 @@ export default {
             this.fetchProductPrice(),
             this.loadOrders()
         ])
+    },
+    components: {
+        Loader: () => import('../../shared/components/Loader.vue')
     }
 }
 </script>

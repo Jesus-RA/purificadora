@@ -7,7 +7,11 @@ export const loadLandingContent = async ( { commit } ) => {
         commit('setLoading', true, { root: true })
 
         const { data } = await axios.get('/landing-content')
-        commit('setLandingContent', data)
+
+        const gallery_images = data.gallery_images.split(',').map( image => image.replaceAll('\n', ''))
+        const companyData = { ...data, gallery_images: gallery_images}
+
+        commit('setLandingContent', companyData)
 
     }catch(error){
         console.table(error)

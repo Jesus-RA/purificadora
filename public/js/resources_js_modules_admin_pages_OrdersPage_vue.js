@@ -193,6 +193,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -224,7 +228,8 @@ var maxDate = function maxDate(maxDays) {
         phone: '',
         date: null
       },
-      currencyFormatter: _helpers_CurrencyFormatter__WEBPACK_IMPORTED_MODULE_1__["default"]
+      currencyFormatter: _helpers_CurrencyFormatter__WEBPACK_IMPORTED_MODULE_1__["default"],
+      formLoading: false
     };
   },
   validations: {
@@ -269,10 +274,11 @@ var maxDate = function maxDate(maxDays) {
                 return _context.abrupt("return");
 
               case 3:
-                _context.next = 5;
+                _this.formLoading = true;
+                _context.next = 6;
                 return _this.makeOrder(_this.order);
 
-              case 5:
+              case 6:
                 hasBeebOrderCreated = _context.sent;
 
                 if (hasBeebOrderCreated) {
@@ -295,7 +301,9 @@ var maxDate = function maxDate(maxDays) {
                   timer: 3000
                 });
 
-              case 8:
+                _this.formLoading = false;
+
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -304,7 +312,7 @@ var maxDate = function maxDate(maxDays) {
       }))();
     }
   }),
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapState)('adminModule', ['product_price'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('adminModule', ['getOrdersData', 'getOrdersTotals'])),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapState)(['isLoading'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapState)('adminModule', ['product_price'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('adminModule', ['getOrdersData', 'getOrdersTotals'])),
   created: function created() {
     var _this2 = this;
 
@@ -323,6 +331,11 @@ var maxDate = function maxDate(maxDays) {
         }
       }, _callee2);
     }))();
+  },
+  components: {
+    Loader: function Loader() {
+      return __webpack_require__.e(/*! import() */ "resources_js_modules_shared_components_Loader_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../../shared/components/Loader.vue */ "./resources/js/modules/shared/components/Loader.vue"));
+    }
   }
 });
 
@@ -413,460 +426,490 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container my-5" }, [
-    _c("div", { staticClass: "row" }, [
-      _c(
-        "div",
-        { staticClass: "card col-md-8 mx-auto py-5 px-2 shadow border-0" },
-        [
-          _c("h2", { staticClass: "mb-4 text-center" }, [
-            _vm._v("Ingresar un pedido")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c(
+    _c(
+      "div",
+      { staticClass: "row" },
+      [
+        _vm.isLoading
+          ? _c("Loader", { staticClass: "mx-auto" })
+          : _c(
               "div",
               {
-                staticClass: "card col-10 col-md-8 col-lg-5 p-4 shadow border-0"
+                staticClass: "card col-md-8 mx-auto py-5 px-2 shadow border-0"
               },
               [
-                _c(
-                  "form",
-                  {
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                      }
-                    }
-                  },
-                  [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "text-primary",
-                          attrs: { for: "quantity" }
-                        },
-                        [_vm._v("Cantidad:")]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model.trim",
-                            value: _vm.$v.order.quantity.$model,
-                            expression: "$v.order.quantity.$model",
-                            modifiers: { trim: true }
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "number",
-                          id: "quantity",
-                          placeholder: "0"
-                        },
-                        domProps: { value: _vm.$v.order.quantity.$model },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.$v.order.quantity,
-                              "$model",
-                              $event.target.value.trim()
-                            )
-                          },
-                          blur: function($event) {
-                            return _vm.$forceUpdate()
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _vm.$v.order.$dirty && !_vm.$v.order.quantity.required
-                        ? _c(
-                            "span",
-                            { staticClass: "d-block invalid-feedback" },
-                            [
-                              _vm._v(
-                                "\n                                Es necesario indicar la cantidad de garrafones.\n                            "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.$v.order.quantity.minValue
-                        ? _c(
-                            "span",
-                            { staticClass: "d-block invalid-feedback" },
-                            [
-                              _vm._v(
-                                "\n                                Al menos debe de pedir " +
-                                  _vm._s(
-                                    _vm.$v.order.quantity.$params.minValue.min
-                                  ) +
-                                  " garrafón.\n                            "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.$v.order.quantity.maxValue
-                        ? _c(
-                            "span",
-                            { staticClass: "d-block invalid-feedback" },
-                            [
-                              _vm._v(
-                                "\n                                Por el momento solo puede pedir " +
-                                  _vm._s(
-                                    _vm.$v.order.quantity.$params.maxValue.max
-                                  ) +
-                                  " garrafones como máximo.\n                            "
-                              )
-                            ]
-                          )
-                        : _vm._e()
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "text-primary",
-                          attrs: { for: "address" }
-                        },
-                        [_vm._v("Dirección:")]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model.trim",
-                            value: _vm.$v.order.address.$model,
-                            expression: "$v.order.address.$model",
-                            modifiers: { trim: true }
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "text",
-                          id: "address",
-                          placeholder: "Dirección de entrega"
-                        },
-                        domProps: { value: _vm.$v.order.address.$model },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.$v.order.address,
-                              "$model",
-                              $event.target.value.trim()
-                            )
-                          },
-                          blur: function($event) {
-                            return _vm.$forceUpdate()
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _vm.$v.order.$dirty && !_vm.$v.order.address.required
-                        ? _c(
-                            "span",
-                            { staticClass: "d-block invalid-feedback" },
-                            [
-                              _vm._v(
-                                "\n                                Es necesario indicar la dirección de entrega\n                            "
-                              )
-                            ]
-                          )
-                        : _vm._e()
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "text-primary",
-                          attrs: { for: "phone" }
-                        },
-                        [_vm._v("Teléfono:")]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model.trim",
-                            value: _vm.$v.order.phone.$model,
-                            expression: "$v.order.phone.$model",
-                            modifiers: { trim: true }
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "text",
-                          id: "phone",
-                          placeholder: "Número de teléfono"
-                        },
-                        domProps: { value: _vm.$v.order.phone.$model },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.$v.order.phone,
-                              "$model",
-                              $event.target.value.trim()
-                            )
-                          },
-                          blur: function($event) {
-                            return _vm.$forceUpdate()
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _vm.$v.order.$dirty && !_vm.$v.order.phone.required
-                        ? _c(
-                            "span",
-                            { staticClass: "d-block invalid-feedback" },
-                            [
-                              _vm._v(
-                                "\n                                Es necesario indicar el número de teléfono.\n                            "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.$v.order.phone.minLength
-                        ? _c(
-                            "span",
-                            { staticClass: "d-block invalid-feedback" },
-                            [
-                              _vm._v(
-                                "\n                                El número de teléfono debe de tener mínimo " +
-                                  _vm._s(
-                                    _vm.$v.order.phone.$params.minLength.min
-                                  ) +
-                                  " digitos.\n                            "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.$v.order.phone.maxLength
-                        ? _c(
-                            "span",
-                            { staticClass: "d-block invalid-feedback" },
-                            [
-                              _vm._v(
-                                "\n                                El número de teléfono puede de tener máximo " +
-                                  _vm._s(
-                                    _vm.$v.order.phone.$params.maxLength.max
-                                  ) +
-                                  " digitos.\n                            "
-                              )
-                            ]
-                          )
-                        : _vm._e()
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "label",
-                        { staticClass: "text-primary", attrs: { for: "date" } },
-                        [_vm._v("Fecha:")]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model.trim",
-                            value: _vm.$v.order.date.$model,
-                            expression: "$v.order.date.$model",
-                            modifiers: { trim: true }
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "date", id: "date" },
-                        domProps: { value: _vm.$v.order.date.$model },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.$v.order.date,
-                              "$model",
-                              $event.target.value.trim()
-                            )
-                          },
-                          blur: function($event) {
-                            return _vm.$forceUpdate()
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _vm.$v.order.date.$dirty && !_vm.$v.order.date.required
-                        ? _c(
-                            "span",
-                            { staticClass: "d-block invalid-feedback" },
-                            [
-                              _vm._v(
-                                "\n                                Es necesario indicar la fecha de entrega.\n                            "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.$v.order.date.minDate
-                        ? _c(
-                            "span",
-                            { staticClass: "d-block invalid-feedback" },
-                            [
-                              _vm._v(
-                                "\n                                La fecha mínima de entrega es el día actual.\n                            "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.$v.order.date.maxDate
-                        ? _c(
-                            "span",
-                            { staticClass: "d-block invalid-feedback" },
-                            [
-                              _vm._v(
-                                "\n                                Fecha máxima de entrega: " +
-                                  _vm._s(
-                                    _vm.$v.order.date.$params.maxDate.max
-                                  ) +
-                                  " ( 5 días a partir de hoy ).\n                            "
-                              )
-                            ]
-                          )
-                        : _vm._e()
-                    ]),
-                    _vm._v(" "),
-                    _c("p", [
-                      _c("span", { staticClass: "text-primary" }, [
-                        _vm._v("Total:")
-                      ]),
-                      _vm._v(
-                        " " +
-                          _vm._s(
-                            _vm.currencyFormatter.format(
-                              _vm.order.quantity * _vm.product_price
-                            )
-                          ) +
-                          "\n                        "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary btn-block text-white",
-                        on: { click: _vm.handleMakeOrder }
-                      },
-                      [
-                        _vm._v(
-                          "\n                            Hacer pedido\n                        "
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c("h2", { staticClass: "col-12 text-center my-5" }, [
-              _vm._v("Historial de pedidos")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card shadow border-0 mx-auto col-10" }, [
-              _c("div", { staticClass: "card-body" }, [
-                _c("table", { staticClass: "w-100" }, [
-                  _vm._m(0),
-                  _vm._v(" "),
+                _c("h2", { staticClass: "mb-4 text-center" }, [
+                  _vm._v("Ingresar un pedido")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row justify-content-center" }, [
                   _c(
-                    "tbody",
+                    "div",
+                    {
+                      staticClass:
+                        "card col-10 col-md-8 col-lg-5 p-4 shadow border-0"
+                    },
                     [
-                      _vm._l(_vm.getOrdersData, function(ref, index) {
-                        var user_type = ref.user_type
-                        var quantity = ref.quantity
-                        var total = ref.total
-                        return _c("tr", { key: index }, [
-                          _c("td", { staticClass: "text-left" }, [
-                            _vm._v(_vm._s(user_type))
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(_vm._s(quantity))
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(_vm._s(_vm.currencyFormatter.format(total)))
-                          ])
-                        ])
-                      }),
-                      _vm._v(" "),
                       _c(
-                        "tr",
+                        "form",
                         {
-                          staticClass:
-                            "text-center font-weight-bold border border-primary border-left-0 border-bottom-0 border-right-0"
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                            }
+                          }
                         },
                         [
-                          _c("td", { staticClass: "text-left" }, [
-                            _vm._v("Totales")
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(_vm._s(_vm.getOrdersTotals.quantity))
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm.currencyFormatter.format(
-                                  _vm.getOrdersTotals.total
+                          _c("div", { staticClass: "form-group" }, [
+                            _c(
+                              "label",
+                              {
+                                staticClass: "text-primary",
+                                attrs: { for: "quantity" }
+                              },
+                              [_vm._v("Cantidad:")]
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.$v.order.quantity.$model,
+                                  expression: "$v.order.quantity.$model",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "number",
+                                id: "quantity",
+                                placeholder: "0"
+                              },
+                              domProps: { value: _vm.$v.order.quantity.$model },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.$v.order.quantity,
+                                    "$model",
+                                    $event.target.value.trim()
+                                  )
+                                },
+                                blur: function($event) {
+                                  return _vm.$forceUpdate()
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.$v.order.$dirty &&
+                            !_vm.$v.order.quantity.required
+                              ? _c(
+                                  "span",
+                                  { staticClass: "d-block invalid-feedback" },
+                                  [
+                                    _vm._v(
+                                      "\n                                Es necesario indicar la cantidad de garrafones.\n                            "
+                                    )
+                                  ]
                                 )
-                              )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            !_vm.$v.order.quantity.minValue
+                              ? _c(
+                                  "span",
+                                  { staticClass: "d-block invalid-feedback" },
+                                  [
+                                    _vm._v(
+                                      "\n                                Al menos debe de pedir " +
+                                        _vm._s(
+                                          _vm.$v.order.quantity.$params.minValue
+                                            .min
+                                        ) +
+                                        " garrafón.\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            !_vm.$v.order.quantity.maxValue
+                              ? _c(
+                                  "span",
+                                  { staticClass: "d-block invalid-feedback" },
+                                  [
+                                    _vm._v(
+                                      "\n                                Por el momento solo puede pedir " +
+                                        _vm._s(
+                                          _vm.$v.order.quantity.$params.maxValue
+                                            .max
+                                        ) +
+                                        " garrafones como máximo.\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "form-group" }, [
+                            _c(
+                              "label",
+                              {
+                                staticClass: "text-primary",
+                                attrs: { for: "address" }
+                              },
+                              [_vm._v("Dirección:")]
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.$v.order.address.$model,
+                                  expression: "$v.order.address.$model",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                id: "address",
+                                placeholder: "Dirección de entrega"
+                              },
+                              domProps: { value: _vm.$v.order.address.$model },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.$v.order.address,
+                                    "$model",
+                                    $event.target.value.trim()
+                                  )
+                                },
+                                blur: function($event) {
+                                  return _vm.$forceUpdate()
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.$v.order.$dirty &&
+                            !_vm.$v.order.address.required
+                              ? _c(
+                                  "span",
+                                  { staticClass: "d-block invalid-feedback" },
+                                  [
+                                    _vm._v(
+                                      "\n                                Es necesario indicar la dirección de entrega\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "form-group" }, [
+                            _c(
+                              "label",
+                              {
+                                staticClass: "text-primary",
+                                attrs: { for: "phone" }
+                              },
+                              [_vm._v("Teléfono:")]
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.$v.order.phone.$model,
+                                  expression: "$v.order.phone.$model",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                id: "phone",
+                                placeholder: "Número de teléfono"
+                              },
+                              domProps: { value: _vm.$v.order.phone.$model },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.$v.order.phone,
+                                    "$model",
+                                    $event.target.value.trim()
+                                  )
+                                },
+                                blur: function($event) {
+                                  return _vm.$forceUpdate()
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.$v.order.$dirty && !_vm.$v.order.phone.required
+                              ? _c(
+                                  "span",
+                                  { staticClass: "d-block invalid-feedback" },
+                                  [
+                                    _vm._v(
+                                      "\n                                Es necesario indicar el número de teléfono.\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            !_vm.$v.order.phone.minLength
+                              ? _c(
+                                  "span",
+                                  { staticClass: "d-block invalid-feedback" },
+                                  [
+                                    _vm._v(
+                                      "\n                                El número de teléfono debe de tener mínimo " +
+                                        _vm._s(
+                                          _vm.$v.order.phone.$params.minLength
+                                            .min
+                                        ) +
+                                        " digitos.\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            !_vm.$v.order.phone.maxLength
+                              ? _c(
+                                  "span",
+                                  { staticClass: "d-block invalid-feedback" },
+                                  [
+                                    _vm._v(
+                                      "\n                                El número de teléfono puede de tener máximo " +
+                                        _vm._s(
+                                          _vm.$v.order.phone.$params.maxLength
+                                            .max
+                                        ) +
+                                        " digitos.\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "form-group" }, [
+                            _c(
+                              "label",
+                              {
+                                staticClass: "text-primary",
+                                attrs: { for: "date" }
+                              },
+                              [_vm._v("Fecha:")]
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.trim",
+                                  value: _vm.$v.order.date.$model,
+                                  expression: "$v.order.date.$model",
+                                  modifiers: { trim: true }
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "date", id: "date" },
+                              domProps: { value: _vm.$v.order.date.$model },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.$v.order.date,
+                                    "$model",
+                                    $event.target.value.trim()
+                                  )
+                                },
+                                blur: function($event) {
+                                  return _vm.$forceUpdate()
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.$v.order.date.$dirty &&
+                            !_vm.$v.order.date.required
+                              ? _c(
+                                  "span",
+                                  { staticClass: "d-block invalid-feedback" },
+                                  [
+                                    _vm._v(
+                                      "\n                                Es necesario indicar la fecha de entrega.\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            !_vm.$v.order.date.minDate
+                              ? _c(
+                                  "span",
+                                  { staticClass: "d-block invalid-feedback" },
+                                  [
+                                    _vm._v(
+                                      "\n                                La fecha mínima de entrega es el día actual.\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            !_vm.$v.order.date.maxDate
+                              ? _c(
+                                  "span",
+                                  { staticClass: "d-block invalid-feedback" },
+                                  [
+                                    _vm._v(
+                                      "\n                                Fecha máxima de entrega: " +
+                                        _vm._s(
+                                          _vm.$v.order.date.$params.maxDate.max
+                                        ) +
+                                        " ( 5 días a partir de hoy ).\n                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _c("span", { staticClass: "text-primary" }, [
+                              _vm._v("Total:")
+                            ]),
+                            _vm._v(
+                              " " +
+                                _vm._s(
+                                  _vm.currencyFormatter.format(
+                                    _vm.order.quantity * _vm.product_price
+                                  )
+                                ) +
+                                "\n                        "
                             )
-                          ])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "btn btn-primary btn-block text-white",
+                              attrs: { disabled: _vm.$v.order.$invalid },
+                              on: { click: _vm.handleMakeOrder }
+                            },
+                            [
+                              _vm.formLoading
+                                ? _c("Loader")
+                                : _c("span", [_vm._v("Hacer pedido")])
+                            ],
+                            1
+                          )
                         ]
                       )
-                    ],
-                    2
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("h2", { staticClass: "col-12 text-center my-5" }, [
+                    _vm._v("Historial de pedidos")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "card shadow border-0 mx-auto col-10" },
+                    [
+                      _c("div", { staticClass: "card-body" }, [
+                        _c("table", { staticClass: "w-100" }, [
+                          _c("thead", [
+                            _c("th", { staticClass: "text-left" }, [
+                              _vm._v("Realizados por")
+                            ]),
+                            _vm._v(" "),
+                            _c("th", { staticClass: "text-center" }, [
+                              _vm._v("Garrafones")
+                            ]),
+                            _vm._v(" "),
+                            _c("th", { staticClass: "text-center" }, [
+                              _vm._v("Total")
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "tbody",
+                            [
+                              _vm._l(_vm.getOrdersData, function(ref, index) {
+                                var user_type = ref.user_type
+                                var quantity = ref.quantity
+                                var total = ref.total
+                                return _c("tr", { key: index }, [
+                                  _c("td", { staticClass: "text-left" }, [
+                                    _vm._v(_vm._s(user_type))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(_vm._s(quantity))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.currencyFormatter.format(total)
+                                      )
+                                    )
+                                  ])
+                                ])
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "tr",
+                                {
+                                  staticClass:
+                                    "text-center font-weight-bold border border-primary border-left-0 border-bottom-0 border-right-0"
+                                },
+                                [
+                                  _c("td", { staticClass: "text-left" }, [
+                                    _vm._v("Totales")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(_vm._s(_vm.getOrdersTotals.quantity))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.currencyFormatter.format(
+                                          _vm.getOrdersTotals.total
+                                        )
+                                      )
+                                    )
+                                  ])
+                                ]
+                              )
+                            ],
+                            2
+                          )
+                        ])
+                      ])
+                    ]
                   )
                 ])
-              ])
-            ])
-          ])
-        ]
-      )
-    ])
+              ]
+            )
+      ],
+      1
+    )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("th", { staticClass: "text-left" }, [_vm._v("Realizados por")]),
-      _vm._v(" "),
-      _c("th", { staticClass: "text-center" }, [_vm._v("Garrafones")]),
-      _vm._v(" "),
-      _c("th", { staticClass: "text-center" }, [_vm._v("Total")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

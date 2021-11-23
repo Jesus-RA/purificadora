@@ -47,6 +47,8 @@ class CompanyDataController extends Controller
             CompanyData::create( $request->all() );
         }
         
+        $request->gallery_images = explode(',', $request->gallery_images);
+        
         $companyData->update( $request->all() );
 
         return response()->json([

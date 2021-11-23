@@ -41,3 +41,13 @@ export const getOrdersTotals = ( state ) => {
     return ordersTotals
 
 }
+
+export const getCompanyData = ( state ) => {
+    return {
+        product_price: state.product_price,
+        main_image: state.main_image,
+        gallery_images: state.gallery_images,
+        video: state.video,
+        phone: state.phone,
+    }
+}
