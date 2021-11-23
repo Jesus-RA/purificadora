@@ -48,7 +48,7 @@
                         class="btn btn-primary btn-block mt-4 text-white"
                         @click="handleLogin"
                     >
-                        <Loader v-if="isLoading"/>
+                        <Loader v-if="isLoading" color="light"/>
                         
                         <span v-else>Iniciar Sesión</span>
                     </button>

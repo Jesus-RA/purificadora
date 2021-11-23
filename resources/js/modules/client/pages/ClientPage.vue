@@ -43,11 +43,86 @@
 
                         <div class="col-12 mt-4">
                             <h2>Pedidos</h2>
-                            <button class="btn btn-primary btn-sm text-white">
+                            <button
+                                v-b-modal.make-order
+                                class="btn btn-primary btn-sm text-white"
+                            >
                                 Hacer un pedido
                                 <i class="fas fa-shopping-bag"></i>
                             </button>
 
+                            <b-modal id="make-order" title="Hacer pedido" centered>
+
+                                <form class="px-4">
+                                    <div class="form-group">
+                                        <label for="quantity">Cantidad:</label>
+                                        <input type="number" id="quantity" placeholder="0" class="form-control" v-model.trim="$v.order.quantity.$model">
+                                        <span
+                                            class="d-block invalid-feedback"
+                                            v-if="$v.order.$dirty && !$v.order.quantity.required"
+                                        >
+                                            Es necesario indicar la cantidad de garrafones.
+                                        </span>
+                                        <span
+                                            class="d-block invalid-feedback"
+                                            v-if="!$v.order.quantity.minValue"
+                                        >
+                                            Al menos debe de pedir {{ $v.order.quantity.$params.minValue.min }} garrafón.
+                                        </span>
+                                        <span
+                                            class="d-block invalid-feedback"
+                                            v-if="!$v.order.quantity.maxValue"
+                                        >
+                                            Por el momento solo puede pedir {{ $v.order.quantity.$params.maxValue.max }} garrafones como máximo.
+                                        </span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="date">Fecha:</label>
+                                        <input type="date" id="date" class="form-control" v-model.trim="$v.order.date.$model">
+                                        <span
+                                            class="d-block invalid-feedback"
+                                            v-if="$v.order.date.$dirty && !$v.order.date.required"
+                                        >
+                                            Es necesario indicar la fecha de entrega.
+                                        </span>
+                                        <span
+                                            class="d-block invalid-feedback"
+                                            v-if="!$v.order.date.minDate"
+                                        >
+                                            La fecha mínima de entrega es el día actual.
+                                        </span>
+                                        <span
+                                            class="d-block invalid-feedback"
+                                            v-if="!$v.order.date.maxDate"
+                                        >
+                                            Fecha máxima de entrega: {{ $v.order.date.$params.maxDate.max }} ( 5 días a partir de hoy ).
+                                        </span>
+                                    </div>
+
+                                    <p>
+                                        <span class="text-primary">Total:</span> {{ currencyFormatter.format( order.quantity * product_price ) }}
+                                    </p>
+                                </form>
+                                
+                                <template #modal-footer="{ ok, cancel }">
+                                    <div class="w-100 row justify-content-around">
+                                        <button
+                                            class="btn btn-danger btn-sm mx-4"
+                                            @click="cancel()"
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            class="btn btn-primary btn-sm text-white mx-4"
+                                            @click="handleMakeOrder(ok)"
+                                            :disabled="$v.order.$invalid"
+                                        >
+                                            Hacer pedido
+                                        </button>
+                                    </div>
+                                </template>
+                            </b-modal>
                         </div>
 
                         <div class="col-12 mt-4">
@@ -150,7 +225,31 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { required } from 'vuelidate/lib/validators'
+import { required, integer, minValue, maxValue, helpers } from 'vuelidate/lib/validators'
+import CurrencyFormatter from '../../../helpers/CurrencyFormatter'
+
+const minDate = (value) => {
+
+    if(!value) return true
+        
+    const timeZone = 'es-MX'
+    const orderDate = new Date( value.replaceAll('-', '/') ).toLocaleDateString( timeZone )
+
+    return orderDate >= new Date().toLocaleDateString( timeZone )
+    
+}
+
+const maxDate = (maxDays) => {
+
+    const today = new Date()
+    const maxDate = new Date( today.getFullYear(), today.getMonth(), today.getDate() + maxDays )
+
+    return helpers.withParams(
+        { type: 'maxDate',  max: maxDate.toLocaleDateString('es-MX') },
+        (value) => new Date(value) <= maxDate
+    )
+
+}
 
 export default {
 
@@ -163,14 +262,32 @@ export default {
             from: null,
             to: null,
             isLoadingUserInfo: false,
+            order: {
+                quantity: null,
+                date: null
+            },
+            currencyFormatter: CurrencyFormatter
         }
     },
     validations: {
         from: { required },
-        to: { required }
+        to: { required },
+        order: {
+            quantity: {
+                required,
+                integer,
+                minValue: minValue(1),
+                maxValue: maxValue(50)
+            },
+            date: {
+                required,
+                minDate,
+                maxDate: maxDate(5),
+            }
+        }
     },
     methods: {
-        ...mapActions('clientModule', ['loadProfileData', 'loadUserOrders']),
+        ...mapActions('clientModule', ['loadProfileData', 'loadUserOrders', 'makeOrder', 'fetchProductPrice']),
         async searchOrders(){
 
             this.$v.$touch()
@@ -181,11 +298,40 @@ export default {
                 from: this.from,
                 to: this.to
             })
+        },
+        async handleMakeOrder(closeModal){
+
+            this.$v.order.quantity.$touch()
+            this.$v.order.date.$touch()
+
+            if( this.$v.order.$invalid ) return
+
+            closeModal()
+
+            const hasBeebOrderCreated = await this.makeOrder(this.order)
+
+            if(hasBeebOrderCreated){
+                this.order = {
+                    quantity: null,
+                    date: null
+                }
+
+                this.$v.order.$reset()
+            }
+
+            this.$swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                title: hasBeebOrderCreated ? 'Pedido realizado' : 'No se ha podido realizar el pedido, intente nuevamente',
+                icon: hasBeebOrderCreated ? 'success' : 'error',
+                timer: 3000
+            })
         }
     },
     computed: {
         ...mapState(['isLoading']),
-        ...mapState('clientModule', ['orders', 'ordersQuantity', 'ordersTotal']),
+        ...mapState('clientModule', ['orders', 'ordersQuantity', 'ordersTotal', 'product_price']),
         ...mapGetters('clientModule', ['getProfileData', 'profileHasData']),
         fullname(){
             return `${ this.name } ${ this.lastname }`
@@ -210,7 +356,8 @@ export default {
 
         await Promise.all([
             this.loadProfileData(),
-            this.loadUserOrders({})
+            this.loadUserOrders({}),
+            this.fetchProductPrice()
         ])
 
         if( !this.profileHasData ){
@@ -276,6 +423,10 @@ export default {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, .5);
   box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+button{
+    flex-grow: 1;
 }
 
 </style>

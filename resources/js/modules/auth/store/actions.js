@@ -36,9 +36,7 @@ export const register = async ( { commit }, user ) => {
 
     return await axios.post('/register', user)
         .then( ({ data }) => {
-
             commit('setLoading', false, { root: true })
-            commit('setUser', data)
 
             return true
             

@@ -7,11 +7,17 @@ use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Auth\RoleWithAbilitiesController;
+use App\Http\Controllers\CompanyData\CompanyDataController;
 
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::post('register', [RegisterController::class, 'register'])->name('register');
+Route::get('landing-content', [CompanyDataController::class, 'getLandingContent'])->name('company_data.landing_content');
+Route::get('product_price', [CompanyDataController::class, 'getProductPrice'])->name('company_data.product_price');
 
 Route::middleware(['auth:sanctum'])->group(function(){
+
+    Route::get('company-data', [CompanyDataController::class, 'index'])->name('company_data.index');
+    Route::post('company-data', [CompanyDataController::class, 'store'])->name('company_data.store');
 
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/user/{user}', [OrderController::class, 'user_orders'])->name('orders.user_orders');

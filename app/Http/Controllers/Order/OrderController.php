@@ -7,6 +7,7 @@ use App\Models\Order\Order;
 use Illuminate\Http\Request;
 use App\Http\Requests\OrderRequest;
 use App\Http\Controllers\Controller;
+use App\Models\CompanyData\CompanyData;
 
 class OrderController extends Controller
 {
@@ -19,7 +20,9 @@ class OrderController extends Controller
     {
         $this->authorize('viewAny', Order::class);
 
-        $orders = Order::all();
+        $orders = Order::all()->each(function($order){
+            $order->ownerRole = User::find($order->user_id)->roles->pluck('name')->first();
+        });
 
         return response()->json( $orders, 200 );
     }
@@ -33,9 +36,17 @@ class OrderController extends Controller
     public function store(OrderRequest $request)
     {
         $this->authorize('create', Order::class);
+
+        $companyData = CompanyData::first();
+
+        if( !$companyData && $companyData->product_price ){
+            return response()->json([
+                'message' => 'Es necesario especificar el precio del producto antes de poder ingresar ordenes.'
+            ], 404);
+        }
         
         $order = Order::make( $request->all() );
-        $order->total = 12 * $request->quantity;
+        $order->total = $companyData->product_price * $request->quantity;
         auth()->user()->orders()->save( $order );
 
         return response()->json( $order, 201 );

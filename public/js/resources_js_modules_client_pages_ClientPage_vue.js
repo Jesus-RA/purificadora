@@ -13,8 +13,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var _helpers_CurrencyFormatter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/CurrencyFormatter */ "./resources/js/helpers/CurrencyFormatter.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -177,7 +178,102 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+
+
+
+var minDate = function minDate(value) {
+  if (!value) return true;
+  var timeZone = 'es-MX';
+  var orderDate = new Date(value.replaceAll('-', '/')).toLocaleDateString(timeZone);
+  return orderDate >= new Date().toLocaleDateString(timeZone);
+};
+
+var maxDate = function maxDate(maxDays) {
+  var today = new Date();
+  var maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + maxDays);
+  return vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.helpers.withParams({
+    type: 'maxDate',
+    max: maxDate.toLocaleDateString('es-MX')
+  }, function (value) {
+    return new Date(value) <= maxDate;
+  });
+};
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -188,18 +284,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       address: '',
       from: null,
       to: null,
-      isLoadingUserInfo: false
+      isLoadingUserInfo: false,
+      order: {
+        quantity: null,
+        date: null
+      },
+      currencyFormatter: _helpers_CurrencyFormatter__WEBPACK_IMPORTED_MODULE_1__["default"]
     };
   },
   validations: {
     from: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required
     },
     to: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required
+    },
+    order: {
+      quantity: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required,
+        integer: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.integer,
+        minValue: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.minValue)(1),
+        maxValue: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.maxValue)(50)
+      },
+      date: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__.required,
+        minDate: minDate,
+        maxDate: maxDate(5)
+      }
     }
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapActions)('clientModule', ['loadProfileData', 'loadUserOrders'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('clientModule', ['loadProfileData', 'loadUserOrders', 'makeOrder', 'fetchProductPrice'])), {}, {
     searchOrders: function searchOrders() {
       var _this = this;
 
@@ -231,9 +345,63 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         }, _callee);
       }))();
+    },
+    handleMakeOrder: function handleMakeOrder(closeModal) {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var hasBeebOrderCreated;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this2.$v.order.quantity.$touch();
+
+                _this2.$v.order.date.$touch();
+
+                if (!_this2.$v.order.$invalid) {
+                  _context2.next = 4;
+                  break;
+                }
+
+                return _context2.abrupt("return");
+
+              case 4:
+                closeModal();
+                _context2.next = 7;
+                return _this2.makeOrder(_this2.order);
+
+              case 7:
+                hasBeebOrderCreated = _context2.sent;
+
+                if (hasBeebOrderCreated) {
+                  _this2.order = {
+                    quantity: null,
+                    date: null
+                  };
+
+                  _this2.$v.order.$reset();
+                }
+
+                _this2.$swal.fire({
+                  toast: true,
+                  position: 'top-end',
+                  showConfirmButton: false,
+                  title: hasBeebOrderCreated ? 'Pedido realizado' : 'No se ha podido realizar el pedido, intente nuevamente',
+                  icon: hasBeebOrderCreated ? 'success' : 'error',
+                  timer: 3000
+                });
+
+              case 10:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
   }),
-  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)(['isLoading'])), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapState)('clientModule', ['orders', 'ordersQuantity', 'ordersTotal'])), (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)('clientModule', ['getProfileData', 'profileHasData'])), {}, {
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapState)(['isLoading'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapState)('clientModule', ['orders', 'ordersQuantity', 'ordersTotal', 'product_price'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('clientModule', ['getProfileData', 'profileHasData'])), {}, {
     fullname: function fullname() {
       return "".concat(this.name, " ").concat(this.lastname);
     },
@@ -249,22 +417,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   created: function created() {
-    var _this2 = this;
+    var _this3 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      var _this2$getProfileData, name, lastname, phone, address;
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      var _this3$getProfileData, name, lastname, phone, address;
 
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              _this2.isLoadingUserInfo = true;
-              _context2.next = 3;
-              return Promise.all([_this2.loadProfileData(), _this2.loadUserOrders({})]);
+              _this3.isLoadingUserInfo = true;
+              _context3.next = 3;
+              return Promise.all([_this3.loadProfileData(), _this3.loadUserOrders({}), _this3.fetchProductPrice()]);
 
             case 3:
-              if (!_this2.profileHasData) {
-                _this2.$swal.fire({
+              if (!_this3.profileHasData) {
+                _this3.$swal.fire({
                   toast: true,
                   position: 'top-end',
                   showConfirmButton: false,
@@ -272,7 +440,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   title: 'Antes de continuar por favor ingresa la información de tu perfil, es necesaria para realizar las entregas.',
                   timer: 7000
                 }).then(function () {
-                  _this2.$router.push({
+                  _this3.$router.push({
                     name: 'edit-profile'
                   });
 
@@ -280,19 +448,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 });
               }
 
-              _this2$getProfileData = _this2.getProfileData, name = _this2$getProfileData.name, lastname = _this2$getProfileData.lastname, phone = _this2$getProfileData.phone, address = _this2$getProfileData.address;
-              _this2.name = name;
-              _this2.lastname = lastname;
-              _this2.phone = phone;
-              _this2.address = address;
-              _this2.isLoadingUserInfo = false;
+              _this3$getProfileData = _this3.getProfileData, name = _this3$getProfileData.name, lastname = _this3$getProfileData.lastname, phone = _this3$getProfileData.phone, address = _this3$getProfileData.address;
+              _this3.name = name;
+              _this3.lastname = lastname;
+              _this3.phone = phone;
+              _this3.address = address;
+              _this3.isLoadingUserInfo = false;
 
             case 10:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2);
+      }, _callee3);
     }))();
   },
   components: {
@@ -320,7 +488,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".initials-circle[data-v-c0083a1a] {\n  align-items: center;\n  background: gainsboro;\n  border-radius: 100%;\n  display: flex;\n  flex-direction: column;\n  font-size: 2rem;\n  height: 6rem;\n  justify-content: center;\n  width: 6rem;\n}\n.orders-details[data-v-c0083a1a] {\n  max-height: 35rem;\n  overflow: hidden;\n}\n.orders-board[data-v-c0083a1a] {\n  max-height: 60%;\n  overflow: scroll;\n}\n[data-v-c0083a1a]::-webkit-scrollbar {\n  -webkit-appearance: none;\n  width: 7px;\n}\n[data-v-c0083a1a]::-webkit-scrollbar-thumb {\n  border-radius: 4px;\n  background-color: rgba(0, 0, 0, 0.5);\n  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".initials-circle[data-v-c0083a1a] {\n  align-items: center;\n  background: gainsboro;\n  border-radius: 100%;\n  display: flex;\n  flex-direction: column;\n  font-size: 2rem;\n  height: 6rem;\n  justify-content: center;\n  width: 6rem;\n}\n.orders-details[data-v-c0083a1a] {\n  max-height: 35rem;\n  overflow: hidden;\n}\n.orders-board[data-v-c0083a1a] {\n  max-height: 60%;\n  overflow: scroll;\n}\n[data-v-c0083a1a]::-webkit-scrollbar {\n  -webkit-appearance: none;\n  width: 7px;\n}\n[data-v-c0083a1a]::-webkit-scrollbar-thumb {\n  border-radius: 4px;\n  background-color: rgba(0, 0, 0, 0.5);\n  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);\n}\nbutton[data-v-c0083a1a] {\n  flex-grow: 1;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -531,20 +699,288 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-12 mt-4" }, [
-                    _c("h2", [_vm._v("Pedidos")]),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      { staticClass: "btn btn-primary btn-sm text-white" },
-                      [
-                        _vm._v(
-                          "\n                            Hacer un pedido\n                            "
-                        ),
-                        _c("i", { staticClass: "fas fa-shopping-bag" })
-                      ]
-                    )
-                  ]),
+                  _c(
+                    "div",
+                    { staticClass: "col-12 mt-4" },
+                    [
+                      _c("h2", [_vm._v("Pedidos")]),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          directives: [
+                            {
+                              name: "b-modal",
+                              rawName: "v-b-modal.make-order",
+                              modifiers: { "make-order": true }
+                            }
+                          ],
+                          staticClass: "btn btn-primary btn-sm text-white"
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Hacer un pedido\n                            "
+                          ),
+                          _c("i", { staticClass: "fas fa-shopping-bag" })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-modal",
+                        {
+                          attrs: {
+                            id: "make-order",
+                            title: "Hacer pedido",
+                            centered: ""
+                          },
+                          scopedSlots: _vm._u([
+                            {
+                              key: "modal-footer",
+                              fn: function(ref) {
+                                var ok = ref.ok
+                                var cancel = ref.cancel
+                                return [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-100 row justify-content-around"
+                                    },
+                                    [
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "btn btn-danger btn-sm mx-4",
+                                          on: {
+                                            click: function($event) {
+                                              return cancel()
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                        Cancelar\n                                    "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "btn btn-primary btn-sm text-white mx-4",
+                                          attrs: {
+                                            disabled: _vm.$v.order.$invalid
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.handleMakeOrder(ok)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                        Hacer pedido\n                                    "
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              }
+                            }
+                          ])
+                        },
+                        [
+                          _c("form", { staticClass: "px-4" }, [
+                            _c("div", { staticClass: "form-group" }, [
+                              _c("label", { attrs: { for: "quantity" } }, [
+                                _vm._v("Cantidad:")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model.trim",
+                                    value: _vm.$v.order.quantity.$model,
+                                    expression: "$v.order.quantity.$model",
+                                    modifiers: { trim: true }
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "number",
+                                  id: "quantity",
+                                  placeholder: "0"
+                                },
+                                domProps: {
+                                  value: _vm.$v.order.quantity.$model
+                                },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.$v.order.quantity,
+                                      "$model",
+                                      $event.target.value.trim()
+                                    )
+                                  },
+                                  blur: function($event) {
+                                    return _vm.$forceUpdate()
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _vm.$v.order.$dirty &&
+                              !_vm.$v.order.quantity.required
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Es necesario indicar la cantidad de garrafones.\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.order.quantity.minValue
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Al menos debe de pedir " +
+                                          _vm._s(
+                                            _vm.$v.order.quantity.$params
+                                              .minValue.min
+                                          ) +
+                                          " garrafón.\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.order.quantity.maxValue
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Por el momento solo puede pedir " +
+                                          _vm._s(
+                                            _vm.$v.order.quantity.$params
+                                              .maxValue.max
+                                          ) +
+                                          " garrafones como máximo.\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "form-group" }, [
+                              _c("label", { attrs: { for: "date" } }, [
+                                _vm._v("Fecha:")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model.trim",
+                                    value: _vm.$v.order.date.$model,
+                                    expression: "$v.order.date.$model",
+                                    modifiers: { trim: true }
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { type: "date", id: "date" },
+                                domProps: { value: _vm.$v.order.date.$model },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.$v.order.date,
+                                      "$model",
+                                      $event.target.value.trim()
+                                    )
+                                  },
+                                  blur: function($event) {
+                                    return _vm.$forceUpdate()
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _vm.$v.order.date.$dirty &&
+                              !_vm.$v.order.date.required
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Es necesario indicar la fecha de entrega.\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.order.date.minDate
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        La fecha mínima de entrega es el día actual.\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.$v.order.date.maxDate
+                                ? _c(
+                                    "span",
+                                    { staticClass: "d-block invalid-feedback" },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Fecha máxima de entrega: " +
+                                          _vm._s(
+                                            _vm.$v.order.date.$params.maxDate
+                                              .max
+                                          ) +
+                                          " ( 5 días a partir de hoy ).\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [
+                              _c("span", { staticClass: "text-primary" }, [
+                                _vm._v("Total:")
+                              ]),
+                              _vm._v(
+                                " " +
+                                  _vm._s(
+                                    _vm.currencyFormatter.format(
+                                      _vm.order.quantity * _vm.product_price
+                                    )
+                                  ) +
+                                  "\n                                "
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-12 mt-4" }, [
                     _c("h3", [

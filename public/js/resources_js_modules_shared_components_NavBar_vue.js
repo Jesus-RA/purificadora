@@ -31,21 +31,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       logo: _public_images_logo_png__WEBPACK_IMPORTED_MODULE_0__["default"],
-      sticky: null
+      sticky: null,
+      fixedPosition: null
     };
   },
   watch: {
     '$route': function $route(to) {
       this.sticky = to.name === 'home';
+      this.fixedPosition = this.$route.name === 'home' ? 'top' : '';
     }
   },
   created: function created() {
     this.sticky = this.$router.history.current.name === 'home';
+    this.fixedPosition = this.$route.name === 'home' ? 'top' : '';
   }
 });
 
@@ -221,8 +225,8 @@ var render = function() {
       attrs: {
         toggleable: "lg",
         type: "light",
-        variant: "white",
-        sticky: _vm.sticky
+        variant: "transparent",
+        fixed: _vm.fixedPosition
       }
     },
     [

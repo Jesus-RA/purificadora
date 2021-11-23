@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 import authModule from '../modules/auth/store'
 import clientModule from '../modules/client/store'
+import guestModule from '../modules/guest/store'
+import adminModule from '../modules/admin/store'
 
 Vue.use( Vuex )
 
@@ -17,7 +19,9 @@ const store = new Vuex.Store({
     },
     modules: {
         authModule,
-        clientModule
+        clientModule,
+        guestModule,
+        adminModule
     }
 })
 
