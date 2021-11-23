@@ -15,7 +15,7 @@ return [
 
     'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
         '%s%s',
-        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1,localhost:8001', 'https://purificadora-frontend.netlify.app/', 'https://jesus-ra.github.io/purificadora-frontend/',
+        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1,localhost:8001', 'purificadora-frontend.netlify.app', 'jesus-ra.github.io',
         env('APP_URL') ? ','.parse_url(env('APP_URL'), PHP_URL_HOST) : ''
     ))),
 
