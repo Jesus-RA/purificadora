@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[124],{8124:(e,n,t)=>{t.r(n),t.d(n,{default:()=>r});const l={components:{ClientNavbar:function(){return t.e(608).then(t.bind(t,5608))}}};const r=(0,t(1900).Z)(l,(function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",[t("ClientNavbar"),e._v(" "),t("router-view")],1)}),[],!1,null,null,null).exports}}]);

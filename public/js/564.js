@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[564],{564:(n,e,t)=>{t.r(e),t.d(e,{default:()=>u});const r={components:{AdminNavbar:function(){return t.e(154).then(t.bind(t,6154))}}};const u=(0,t(1900).Z)(r,(function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div",[t("AdminNavbar"),n._v(" "),t("router-view")],1)}),[],!1,null,null,null).exports}}]);
